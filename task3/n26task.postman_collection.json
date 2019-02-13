@@ -67,6 +67,520 @@
 					"response": []
 				},
 				{
+					"name": "Get products with limit",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e8cee373-a180-44a3-9a63-4fbcbbbf98d3",
+								"exec": [
+									"var response = JSON.parse(responseBody);",
+									"",
+									"postman.setGlobalVariable(\"commonSuccessTests\", () => {",
+									"    ",
+									"  tests[\"Status code should be valid\"] = (responseCode.code ===  201) || (responseCode.code === 200);",
+									"  ",
+									"  tests[\"Content-Type should be application/json\"] = postman.getResponseHeader(\"Content-Type\").startsWith(\"application/json;\");",
+									"  ",
+									"  tests[\"Response time is less than 500ms\"] = responseTime < 500;",
+									"  ",
+									"    pm.test('Response body should be valid', () => {",
+									"    pm.response.to.be.not.empty;",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json; ",
+									"  });",
+									"",
+									"});",
+									"",
+									"eval(globals.commonSuccessTests)();",
+									"",
+									"",
+									"pm.test(\"Limit value should be correct\", function () {",
+									"    pm.expect(response.limit).to.eql(10);",
+									"});",
+									"",
+									"pm.test(\"Correct number of objects should be returned\", function () {",
+									"    pm.expect(Object.keys(response.data).length).to.eql(10);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/products?$limit=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "$limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get products with skip param",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e8cee373-a180-44a3-9a63-4fbcbbbf98d3",
+								"exec": [
+									"var response = JSON.parse(responseBody);",
+									"",
+									"postman.setGlobalVariable(\"commonSuccessTests\", () => {",
+									"    ",
+									"  tests[\"Status code should be valid\"] = (responseCode.code ===  201) || (responseCode.code === 200);",
+									"  ",
+									"  tests[\"Content-Type should be application/json\"] = postman.getResponseHeader(\"Content-Type\").startsWith(\"application/json;\");",
+									"  ",
+									"  tests[\"Response time is less than 500ms\"] = responseTime < 500;",
+									"  ",
+									"    pm.test('Response body should be valid', () => {",
+									"    pm.response.to.be.not.empty;",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json; ",
+									"  });",
+									"",
+									"});",
+									"",
+									"eval(globals.commonSuccessTests)();",
+									"",
+									"",
+									"pm.test(\"Skip value should be correct\", function () {",
+									"    pm.expect(response.skip).to.eql(100);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/products?$skip=100",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "$skip",
+									"value": "100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get products with price sort desc",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e8cee373-a180-44a3-9a63-4fbcbbbf98d3",
+								"exec": [
+									"var response = JSON.parse(responseBody);",
+									"",
+									"postman.setGlobalVariable(\"commonSuccessTests\", () => {",
+									"    ",
+									"  tests[\"Status code should be valid\"] = (responseCode.code ===  201) || (responseCode.code === 200);",
+									"  ",
+									"  tests[\"Content-Type should be application/json\"] = postman.getResponseHeader(\"Content-Type\").startsWith(\"application/json;\");",
+									"  ",
+									"  tests[\"Response time is less than 500ms\"] = responseTime < 500;",
+									"  ",
+									"    pm.test('Response body should be valid', () => {",
+									"    pm.response.to.be.not.empty;",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json; ",
+									"  });",
+									"",
+									"});",
+									"",
+									"eval(globals.commonSuccessTests)();",
+									"",
+									"",
+									"pm.test(\"Price of product[0] should be the highest\", function () {",
+									"    var first_price = response.data[0].price;",
+									"    var second_price = response.data[1].price;",
+									"    pm.expect(first_price).to.be.above(second_price);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/products?$sort[price]=-1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "$sort[price]",
+									"value": "-1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get products with price sort asc",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e8cee373-a180-44a3-9a63-4fbcbbbf98d3",
+								"exec": [
+									"var response = JSON.parse(responseBody);",
+									"",
+									"postman.setGlobalVariable(\"commonSuccessTests\", () => {",
+									"    ",
+									"  tests[\"Status code should be valid\"] = (responseCode.code ===  201) || (responseCode.code === 200);",
+									"  ",
+									"  tests[\"Content-Type should be application/json\"] = postman.getResponseHeader(\"Content-Type\").startsWith(\"application/json;\");",
+									"  ",
+									"  tests[\"Response time is less than 500ms\"] = responseTime < 500;",
+									"  ",
+									"    pm.test('Response body should be valid', () => {",
+									"    pm.response.to.be.not.empty;",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json; ",
+									"  });",
+									"",
+									"});",
+									"",
+									"eval(globals.commonSuccessTests)();",
+									"",
+									"",
+									"pm.test(\"Price of product[0] should be the lowest\", function () {",
+									"    if (response.data[0].price > 0) {",
+									"        var first_price = response.data[0].price;",
+									"        var second_price = response.data[1].price;",
+									"        pm.expect(first_price).to.be.below(second_price);   ",
+									"    } else {",
+									"         pm.expect(response.data[0].price).to.be.eql(0);",
+									"    }",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/products?$sort[price]=1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "$sort[price]",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all products, show only the name and price in the result",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e8cee373-a180-44a3-9a63-4fbcbbbf98d3",
+								"exec": [
+									"var response = JSON.parse(responseBody);",
+									"",
+									"postman.setGlobalVariable(\"commonSuccessTests\", () => {",
+									"    ",
+									"  tests[\"Status code should be valid\"] = (responseCode.code ===  201) || (responseCode.code === 200);",
+									"  ",
+									"  tests[\"Content-Type should be application/json\"] = postman.getResponseHeader(\"Content-Type\").startsWith(\"application/json;\");",
+									"  ",
+									"  tests[\"Response time is less than 500ms\"] = responseTime < 500;",
+									"  ",
+									"    pm.test('Response body should be valid', () => {",
+									"    pm.response.to.be.not.empty;",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json; ",
+									"  });",
+									"",
+									"});",
+									"",
+									"eval(globals.commonSuccessTests)();",
+									"",
+									"",
+									"pm.test(\"Just product name and price should be shown\", function () {",
+									"    const shortProductSchema = JSON.parse(environment.shortProductSchema);",
+									"    pm.expect(tv4.validate(response.data[0], shortProductSchema)).to.be.true;",
+									"    console.log(\"Validation is failed: \" + tv4.error);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/products?$select[]=name&$select[]=price",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "$select[]",
+									"value": "name"
+								},
+								{
+									"key": "$select[]",
+									"value": "price"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get products of type HardGood",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e8cee373-a180-44a3-9a63-4fbcbbbf98d3",
+								"exec": [
+									"var response = JSON.parse(responseBody);",
+									"",
+									"postman.setGlobalVariable(\"commonSuccessTests\", () => {",
+									"    ",
+									"  tests[\"Status code should be valid\"] = (responseCode.code ===  201) || (responseCode.code === 200);",
+									"  ",
+									"  tests[\"Content-Type should be application/json\"] = postman.getResponseHeader(\"Content-Type\").startsWith(\"application/json;\");",
+									"  ",
+									"  tests[\"Response time is less than 500ms\"] = responseTime < 500;",
+									"  ",
+									"    pm.test('Response body should be valid', () => {",
+									"    pm.response.to.be.not.empty;",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json; ",
+									"  });",
+									"",
+									"});",
+									"",
+									"eval(globals.commonSuccessTests)();",
+									"",
+									"",
+									"",
+									"pm.test(\"Should return products with correct type\", function () {",
+									"   for (var i= 0; i < response.data.length; i++) {",
+									"       pm.expect(response.data[i].type).to.eql(\"HardGood\");",
+									"   }",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/products?type=HardGood",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "HardGood"
+								},
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get products less than or equal to $1.00",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e8cee373-a180-44a3-9a63-4fbcbbbf98d3",
+								"exec": [
+									"var response = JSON.parse(responseBody);",
+									"",
+									"postman.setGlobalVariable(\"commonSuccessTests\", () => {",
+									"    ",
+									"  tests[\"Status code should be valid\"] = (responseCode.code ===  201) || (responseCode.code === 200);",
+									"  ",
+									"  tests[\"Content-Type should be application/json\"] = postman.getResponseHeader(\"Content-Type\").startsWith(\"application/json;\");",
+									"  ",
+									"  tests[\"Response time is less than 500ms\"] = responseTime < 500;",
+									"  ",
+									"    pm.test('Response body should be valid', () => {",
+									"    pm.response.to.be.not.empty;",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json; ",
+									"  });",
+									"",
+									"});",
+									"",
+									"eval(globals.commonSuccessTests)();",
+									"",
+									"",
+									"",
+									"pm.test(\"Should return products with price <=1$\", function () {",
+									"   for (var i= 0; i < response.data.length; i++) {",
+									"       pm.expect(response.data[i].price).to.be.greaterThan(0).but.not.greaterThan(1);",
+									"   }",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/products?price[$lte]=1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "price[$lte]",
+									"value": "1"
+								},
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Create new product",
 					"event": [
 						{
@@ -905,6 +1419,358 @@
 							],
 							"path": [
 								"healthcheck"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "negative cases",
+			"item": [
+				{
+					"name": "Get products \"Page not found\"",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e8cee373-a180-44a3-9a63-4fbcbbbf98d3",
+								"exec": [
+									"var response = JSON.parse(responseBody);",
+									"",
+									"postman.setGlobalVariable(\"commonFailTests\", () => {",
+									"    ",
+									"  tests[\"Status code should be 404\"] = responseCode.code ===  404;",
+									"  ",
+									"  tests[\"Content-Type should be application/json\"] = postman.getResponseHeader(\"Content-Type\").startsWith(\"application/json;\");",
+									"  ",
+									"  tests[\"Response time should be less than 200ms\"] = responseTime < 500;",
+									"  ",
+									"    pm.test('Response body should be valid', () => {",
+									"    pm.response.to.be.not.empty;",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json; ",
+									"  });",
+									"  ",
+									"    pm.test(\"Error message should be correct\", function () {",
+									"    pm.expect(response.name).to.eql(\"NotFound\");",
+									"    pm.expect(response.message).to.eql(\"Page not found\");",
+									"});",
+									"",
+									"});",
+									"",
+									"eval(globals.commonFailTests)();",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/productstest",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"productstest"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get products \"No record found for id\"",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e8cee373-a180-44a3-9a63-4fbcbbbf98d3",
+								"exec": [
+									"var response = JSON.parse(responseBody);",
+									"",
+									"postman.setGlobalVariable(\"commonNoRecordTests\", () => {",
+									"    ",
+									"  tests[\"Status code should be 404\"] = responseCode.code ===  404;",
+									"  ",
+									"  tests[\"Content-Type should be application/json\"] = postman.getResponseHeader(\"Content-Type\").startsWith(\"application/json;\");",
+									"  ",
+									"  tests[\"Response time should be less than 200ms\"] = responseTime < 500;",
+									"  ",
+									"    pm.test('Response body should be valid', () => {",
+									"    pm.response.to.be.not.empty;",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json; ",
+									"  });",
+									"  ",
+									"    pm.test(\"Error message should be correct\", function () {",
+									"    pm.expect(response.name).to.eql(\"NotFound\");",
+									"    pm.expect(pm.response.text()).to.include(\"No record found for id \");",
+									"    ",
+									"});",
+									"",
+									"});",
+									"",
+									"eval(globals.commonNoRecordTests)();",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/products/111",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products",
+								"111"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all stores \"Page not found\"",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "afc6b66d-5f20-401c-8697-956f150d4805",
+								"exec": [
+									"var response = JSON.parse(responseBody);",
+									"",
+									"eval(globals.commonFailTests)();",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/storestest",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"storestest"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all stores \"No record found for id\"",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "afc6b66d-5f20-401c-8697-956f150d4805",
+								"exec": [
+									"var response = JSON.parse(responseBody);",
+									"",
+									"eval(globals.commonNoRecordTests)();",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/stores/11132",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"stores",
+								"11132"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all services \"Page not found\"",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "867b0b65-0b31-4646-871d-137a1a3b4a65",
+								"exec": [
+									"var response = JSON.parse(responseBody);",
+									"",
+									"eval(globals.commonFailTests)();",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/servicestest",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"servicestest"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all services \"No record found for id\"",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "867b0b65-0b31-4646-871d-137a1a3b4a65",
+								"exec": [
+									"var response = JSON.parse(responseBody);",
+									"",
+									"eval(globals.commonNoRecordTests)();",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/services/111",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"services",
+								"111"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get categories \"Page not found\"",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "25e0ff61-16ea-40c3-8233-0308b02186ea",
+								"exec": [
+									"var response = JSON.parse(responseBody);",
+									"",
+									"eval(globals.commonFailTests)();",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/categoriestest",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categoriestest"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get categories \"No record found for id\"",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "25e0ff61-16ea-40c3-8233-0308b02186ea",
+								"exec": [
+									"var response = JSON.parse(responseBody);",
+									"",
+									"eval(globals.commonNoRecordTests)();",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/categories/1111",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"1111"
 							]
 						}
 					},
