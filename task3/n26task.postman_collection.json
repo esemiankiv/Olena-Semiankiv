@@ -1,0 +1,916 @@
+{
+	"info": {
+		"_postman_id": "2141f29a-f4c4-4154-a187-a37d518c647a",
+		"name": "N26 task",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "products",
+			"item": [
+				{
+					"name": "Get all products",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e8cee373-a180-44a3-9a63-4fbcbbbf98d3",
+								"exec": [
+									"var response = JSON.parse(responseBody);",
+									"",
+									"postman.setGlobalVariable(\"commonSuccessTests\", () => {",
+									"    ",
+									"  tests[\"Status code should be valid\"] = (responseCode.code ===  201) || (responseCode.code === 200);",
+									"  ",
+									"  tests[\"Content-Type should be application/json\"] = postman.getResponseHeader(\"Content-Type\").startsWith(\"application/json;\");",
+									"  ",
+									"  tests[\"Response time is less than 500ms\"] = responseTime < 500;",
+									"  ",
+									"    pm.test('Response body should be valid', () => {",
+									"    pm.response.to.be.not.empty;",
+									"    pm.response.to.be.withBody;",
+									"    pm.response.to.be.json; ",
+									"  });",
+									"",
+									"});",
+									"",
+									"eval(globals.commonSuccessTests)();",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/products",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d7902901-88f0-4436-b0d9-a9a1dfe6fefd",
+								"exec": [
+									"var response = JSON.parse(responseBody);",
+									"",
+									"eval(globals.commonSuccessTests)();",
+									"",
+									"pm.test(\"Product json schema  should be valid\", function () {",
+									"    const productSchema = JSON.parse(environment.productSchema);",
+									"    pm.expect(tv4.validate(response, productSchema)).to.be.true;",
+									"    console.log(\"Validation is failed: \" + tv4.error);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Product name is correct\", function () {",
+									"    pm.expect(response.name).to.eql(\"Test product\");",
+									"});",
+									"",
+									"pm.environment.set(\"product_id\", response.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Test product\",\n  \"type\": \"test\",\n  \"price\": 100,\n  \"shipping\": 3,\n  \"upc\": \"string\",\n  \"description\": \"My short description\",\n  \"manufacturer\": \"Demo\",\n  \"model\": \"AA\",\n  \"url\": \"myurl\",\n  \"image\": \"path_to_my_png\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/products",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get product details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d36296bf-003c-486e-b7c2-606283f038fc",
+								"exec": [
+									"eval(globals.commonSuccessTests)();",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/products/{{product_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products",
+								"{{product_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3fe18469-7e4a-4d8e-9842-9319b6ab33bc",
+								"exec": [
+									"eval(globals.commonSuccessTests)();",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"string\",\n  \"type\": \"string\",\n  \"price\": 0,\n  \"shipping\": 0,\n  \"upc\": \"string\",\n  \"description\": \"string\",\n  \"manufacturer\": \"string\",\n  \"model\": \"string\",\n  \"url\": \"string\",\n  \"image\": \"string\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/products/{{product_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products",
+								"{{product_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b975b2bc-3aa4-4eb3-8a68-193406447e86",
+								"exec": [
+									"eval(globals.commonSuccessTests)();",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/products/{{product_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products",
+								"{{product_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "\n"
+		},
+		{
+			"name": "stores",
+			"item": [
+				{
+					"name": "Get all stores",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "afc6b66d-5f20-401c-8697-956f150d4805",
+								"exec": [
+									"eval(globals.commonSuccessTests)();",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/stores",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"stores"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create store",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "047e9a80-b524-4f8f-abf6-685fea4714d6",
+								"exec": [
+									"var response = JSON.parse(responseBody);",
+									"",
+									"eval(globals.commonSuccessTests)();",
+									"",
+									"pm.test(\"Store json schema  should be valid\", function () {",
+									"    const storeSchema = JSON.parse(environment.storeSchema);",
+									"    pm.expect(tv4.validate(response, storeSchema)).to.be.true;",
+									"    console.log(\"Validation is failed: \" + tv4.error);",
+									"});",
+									"",
+									"pm.test(\"Store name is correct\", function () {",
+									"    pm.expect(response.name).to.eql(\"Demo Store\");",
+									"});",
+									"",
+									"pm.environment.set(\"store_id\", response.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Demo Store\",\n  \"type\": \"test\",\n  \"address\": \"Hohenzollerndamm\",\n  \"address2\": \"34A\",\n  \"city\": \"Berlin\",\n  \"state\": \"string\",\n  \"zip\": \"10717\",\n  \"lat\": 0,\n  \"lng\": 0,\n  \"hours\": \"12\",\n  \"services\": {}\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/stores",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"stores"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get store details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d11053a7-ff90-4d54-8d8e-eb82d921c032",
+								"exec": [
+									"eval(globals.commonSuccessTests)();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/stores/{{store_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"stores",
+								"{{store_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update store",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3ae71bf0-64ee-41e9-86e1-723e9083e7d5",
+								"exec": [
+									"eval(globals.commonSuccessTests)();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"string\",\n  \"type\": \"string\",\n  \"address\": \"string\",\n  \"address2\": \"string\",\n  \"city\": \"string\",\n  \"state\": \"string\",\n  \"zip\": \"string\",\n  \"lat\": 0,\n  \"lng\": 0,\n  \"hours\": \"string\",\n  \"services\": {}\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/stores/{{store_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"stores",
+								"{{store_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete store",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "db4c1685-35ea-4fa8-876e-8cd16abecd3c",
+								"exec": [
+									"eval(globals.commonSuccessTests)();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/stores/{{store_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"stores",
+								"{{store_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "services",
+			"item": [
+				{
+					"name": "Get all services",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "867b0b65-0b31-4646-871d-137a1a3b4a65",
+								"exec": [
+									"eval(globals.commonSuccessTests)();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/services",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"services"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create service",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2be1362c-8b07-477b-a3e1-d89c1fc8d9b3",
+								"exec": [
+									"var response = JSON.parse(responseBody);",
+									"",
+									"eval(globals.commonSuccessTests)();",
+									"",
+									"pm.test(\"Service json schema  should be valid\", function () {",
+									"    const serviceSchema = JSON.parse(environment.serviceSchema);",
+									"    pm.expect(tv4.validate(response, serviceSchema)).to.be.true;",
+									"    console.log(\"Validation is failed: \" + tv4.error);",
+									"});",
+									"",
+									"pm.test(\"Service name is correct\", function () {",
+									"    pm.expect(response.name).to.eql(\"Demo Service\");",
+									"});",
+									"",
+									"pm.environment.set(\"service_id\", response.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Demo Service\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/services",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"services"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get service details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "aaad2ab0-ae0d-495a-8c41-2bfb3d1cdae1",
+								"exec": [
+									"eval(globals.commonSuccessTests)();",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/services/{{service_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"services",
+								"{{service_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update service",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "85be439f-c40a-49e1-817e-9902d587f8d4",
+								"exec": [
+									"eval(globals.commonSuccessTests)();",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"string\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/services/{{service_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"services",
+								"{{service_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete service",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1aced71c-2096-4ff9-b9df-acf1da7ce71c",
+								"exec": [
+									"eval(globals.commonSuccessTests)();",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/services/{{service_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"services",
+								"{{service_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "categories",
+			"item": [
+				{
+					"name": "Get categories",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "25e0ff61-16ea-40c3-8233-0308b02186ea",
+								"exec": [
+									"eval(globals.commonSuccessTests)();",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/categories",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create category",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "884b3b51-7a93-42fc-98cd-725473a2a2b2",
+								"exec": [
+									"var response = JSON.parse(responseBody);",
+									"",
+									"eval(globals.commonSuccessTests)();",
+									"",
+									"pm.test(\"Category json schema  should be valid\", function () {",
+									"    const categorySchema = JSON.parse(environment.categorySchema);",
+									"    pm.expect(tv4.validate(response, categorySchema)).to.be.true;",
+									"    console.log(\"Validation is failed: \" + tv4.error);",
+									"});",
+									"",
+									"pm.test(\"Category name is correct\", function () {",
+									"    pm.expect(response.name).to.eql(\"Test category\");",
+									"});",
+									"",
+									"pm.environment.set(\"category_id\", response.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Test category\",\n  \"id\": \"{{$randomInt}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/categories",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get category details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "556b6f8c-367b-43ee-a0cd-90d8cc2ec492",
+								"exec": [
+									"eval(globals.commonSuccessTests)();",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/categories/{{category_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"{{category_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update category",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c3231a14-e4b5-4832-b837-fc2a0b9ca31a",
+								"exec": [
+									"eval(globals.commonSuccessTests)();",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"string\",\n  \"id\": \"string\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/categories/{{category_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"{{category_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete category",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3cc181c6-f311-46cc-9338-7241a347258b",
+								"exec": [
+									"eval(globals.commonSuccessTests)();",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/categories/{{category_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"{{category_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "utilities",
+			"item": [
+				{
+					"name": "Get version",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3bc33559-10b7-4ee8-8e01-e7f6eafed5d4",
+								"exec": [
+									"eval(globals.commonSuccessTests)();",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/version",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"version"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Healthcheck",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e529cd64-184f-401f-95e6-b451f1801117",
+								"exec": [
+									"eval(globals.commonSuccessTests)();",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/healthcheck",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"healthcheck"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
