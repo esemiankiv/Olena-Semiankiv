@@ -9,7 +9,7 @@
 2. cd api-playground
 3. npm install
 4. npm start
-Best Buy API Playground started at http://localhost:3030
+### Best Buy API Playground started at http://localhost:3030
 5. npm install newman --global
 6. cd task3
 7. run postman collections with newman `newman run n26task.postman_collection.json -e test.postman_environment.json`
